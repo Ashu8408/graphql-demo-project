@@ -61,31 +61,31 @@ const UserList = [
   },
 ];
 
-const MovieList = [
+const CompanyList = [
   {
     id: 1,
-    name: "Avengers Endgame",
-    yearOfPublication: 2019,
-    isInTheaters: true,
+    name: "Amazon",
+    dateOfJoining: "2019-02-11", // YYYY-MM-DD
+    isWorking: true,
   },
   {
     id: 2,
-    name: "Interstellar",
-    yearOfPublication: 2007,
-    isInTheaters: true,
+    name: "Lenovo",
+    dateOfJoining: "2007-06-15",
+    isWorking: true,
   },
   {
     id: 3,
-    name: "Superbad",
-    yearOfPublication: 2009,
-    isInTheaters: true,
+    name: "Google",
+    dateOfJoining: "2009-08-01",
+    isWorking: true,
   },
   {
     id: 4,
-    name: "PedroTech The Movie",
-    yearOfPublication: 2035,
-    isInTheaters: false,
+    name: "Microsoft",
+    dateOfJoining: "2035-01-01",
+    isWorking: false,
   },
 ];
 
-module.exports = { UserList, MovieList };
+module.exports = { UserList, CompanyList };
