@@ -26,6 +26,15 @@ const resolvers = {
 
     },
   },
+
+  User: {
+    companyWorkingIn: () => {
+       return _.filter(CompanyList, (company) => {
+        const year = new Date(company.dateOfJoining).getFullYear();
+        return year >= 2000 && year <= 2010;
+      });
+    }
+  }
 };
 
 module.exports = { resolvers };
