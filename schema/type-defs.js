@@ -49,6 +49,7 @@ const typeDefs = gql`
         
         createUser( input: CreateUserInput! ): User        # smart way of mutating by taking details as input
         updateUsername( input: updateUsernameInput! ): User
+        deleteUser( id: ID! ): User
 
     }
 
