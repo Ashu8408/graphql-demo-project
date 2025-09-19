@@ -13,11 +13,11 @@ const typeDefs = gql`
     }
 
     type Company {
-    id: ID!
-    name: String!
-    dateOfJoining: String!
-    isWorking: Boolean!
-  }
+        id: ID!
+        name: String!
+        dateOfJoining: String!
+        isWorking: Boolean!
+    }
 
 
     type Query {
@@ -38,10 +38,17 @@ const typeDefs = gql`
         # passing friends and company here is not good and not possiblem find anaother way to pass
     }
 
+    input updateUsernameInput {
+        id: ID!
+        newUsername: String!
+    }
+
     type Mutation {
         # whenever we run a mutation we return it's new updated values
         # createUser( name: String!, age: Int! ==all other fields here== ): User!     // one way of defining
+        
         createUser( input: CreateUserInput! ): User        # smart way of mutating by taking details as input
+        updateUsername( input: updateUsernameInput! ): User
 
     }
 
