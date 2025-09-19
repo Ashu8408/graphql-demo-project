@@ -34,6 +34,17 @@ const resolvers = {
         return year >= 2000 && year <= 2010;
       });
     }
+  },
+
+  Mutation: {
+    createUser: (parent ,args) => {
+      const user = args.input
+      // console.log("user = args.input works == chekcking by accessing user=", user);
+      const lastId = UserList[UserList.length-1].id;
+      user.id = lastId + 1;
+      UserList.push(user);
+      return user;
+    }
   }
 };
 

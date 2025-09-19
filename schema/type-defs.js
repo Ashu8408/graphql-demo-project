@@ -28,6 +28,23 @@ const typeDefs = gql`
         company(name: String!): Company!
     }
 
+    input CreateUserInput {
+        name: String!
+        username: String!
+        age: Int = 18           # this makes it default set to 18 if not given input
+        nationality: Nationality = INDIA
+        # friends: [User]
+        # companyWorkingIn: [Company]
+        # passing friends and company here is not good and not possiblem find anaother way to pass
+    }
+
+    type Mutation {
+        # whenever we run a mutation we return it's new updated values
+        # createUser( name: String!, age: Int! ==all other fields here== ): User!     // one way of defining
+        createUser( input: CreateUserInput! ): User        # smart way of mutating by taking details as input
+
+    }
+
     enum Nationality {
         CANADA
         BRAZIL
