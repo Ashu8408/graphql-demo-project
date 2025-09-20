@@ -1,0 +1,101 @@
+# query GetAllUsers {
+#   users{
+#     id
+#     age
+#     name
+#     nationality
+#     friends {
+#       id
+#       name
+#       username
+#       age
+#       __typename
+#       nationality
+#     }
+#     companyWorkingIn {
+#       name
+#       dateOfJoining
+#     }
+#   }
+# }
+
+# query GetUser($userId: ID!) {
+#   user(id: $userId) {
+#     id
+#     name
+#     age
+#     nationality
+#     friends {
+#       name
+#     }
+#     companyWorkingIn {
+#       name
+#       dateOfJoining
+#       isWorking
+#     }
+#   }
+# }
+
+# query getAllCompany {
+#   companies{
+#     id
+#     name
+#     dateOfJoining
+#     isWorking
+#   }
+# }
+
+# query GetCompany($name: String! ){
+#   company(name: $name) {
+#     id
+#     name
+#     isWorking
+#     dateOfJoining
+#   }
+#   }
+# }
+
+# mutation CreateUser($input: CreateUserInput!) {
+#   createUser(input: $input) {
+#     id
+#     name
+#     age
+#   }
+# }
+
+# ==== mutation to update fields ====
+mutation UpdateUsername($input: updateUsernameInput!) {
+  updateUsername(input: $input) {
+    id
+    name
+    username
+  }
+}
+
+# ==== mutation to delete user by ID ====
+mutation DeleteUser($deleteUserId: ID!) {
+  deleteUser(id: $deleteUserId) {
+    id
+  }
+}
+
+# ==== mutation to delete user by username ====
+mutation DeleteByUsername($username: String!) {
+  deleteUserByUserName(username: $username) {
+    id
+    name
+    username
+  }
+}
+
+
+
+# ===== query to check users after mutation ======
+query GetAllUsers {
+  users {
+    id
+    name
+    age
+    username
+  }
+}
