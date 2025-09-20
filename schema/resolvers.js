@@ -66,6 +66,38 @@ const resolvers = {
       _.remove(UserList, (user) => user.id === Number(id));
       return null;
     },
+
+    // deleteUserByUserName: (parent ,args) => {
+    //   const { deleteUsername } = args.input
+    
+    // //  if ( user.id === Number(id) && user.username === deleteUsername ){
+    // //     _.remove(UserList, (user) => user.id === Number(id));
+    // //     return ("user with ${deleteUsername} deleted");
+    // //   }
+
+    // // const userIndex = UserList.findIndex(
+    // //   (user) => user.username === deleteUsername );
+
+    // //   if (userIndex === -1) return null; // user not found
+
+    // //   // Remove user and return it
+    // //   const deletedUser = UserList[userIndex];
+    // //   _.remove(UserList, (u) => u.id === Number(id) && u.username === deleteUsername);
+
+    // //   return deletedUser; // must return User type
+
+    //   _.remove(UserList, (user) => user.username === deleteUsername )
+    //   return deleteUsername;
+    // },
+
+    deleteUserByUserName: (parent, args) => {
+      const { username } = args;
+      const userIndex = UserList.findIndex((u) => u.username === username);
+      if (userIndex === -1) return null;
+      const deletedUser = UserList[userIndex];
+      _.remove(UserList, (u) => u.username === username);
+      return deletedUser;
+    }
   }
 };
 

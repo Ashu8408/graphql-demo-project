@@ -43,6 +43,10 @@ const typeDefs = gql`
         newUsername: String!
     }
 
+    input deleteUsernameInput {
+        username: String!
+    }
+
     type Mutation {
         # whenever we run a mutation we return it's new updated values
         # createUser( name: String!, age: Int! ==all other fields here== ): User!     // one way of defining
@@ -50,6 +54,7 @@ const typeDefs = gql`
         createUser( input: CreateUserInput! ): User        # smart way of mutating by taking details as input
         updateUsername( input: updateUsernameInput! ): User
         deleteUser( id: ID! ): User
+        deleteUserByUserName(username: String!): User
 
     }
 
