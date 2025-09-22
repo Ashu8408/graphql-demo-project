@@ -24,7 +24,7 @@ const QUERY_ALL_COMPANY = gql`
    }
  }
 `;
-const GET_COMPANY_BY_NAME = gql` 
+const GET_COMPANY_BY_NAME = gql`
     query GetCompanyByName($name: String! ){
         company(name: $name) {
             name
@@ -43,6 +43,22 @@ const CREATE_USER_MUTATION = gql`
         }
     }
 `
+const DELETE_USER_BY_ID = gql`
+    mutation DeleteUser($deleteUserId: ID!) {
+        deleteUser(id: $deleteUserId) {
+            id
+        }
+    }
+`
+const DELETE_USER_BY_USERNAME = gql `
+    mutation DeleteByUsername($username: String!) {
+        deleteUserByUserName(username: $username) {
+            id
+            name
+            username
+        }
+    }
+`
 
 function DisplayData() {
 
@@ -53,18 +69,22 @@ function DisplayData() {
     const [username, setUsername] = useState("");
     const [age, setAge] = useState("");
     const [nationality, setNationality] = useState("");
-    
+    const [deleteID, setDeleteID] = useState("");
+    const [deleteUsername, setDeleteUsername] = useState("");
+
     const { loading, error, data, refetch } = useQuery(QUERY_ALL_USERS);
     const { data: companyData } = useQuery( QUERY_ALL_COMPANY);
     const [ fetchCompany, { data: companySearchedData, error: companyError }, ] = useLazyQuery(GET_COMPANY_BY_NAME);
     // fetchCompany is a fn that fetches the data
-    
-    const [ createUser ] = useMutation (CREATE_USER_MUTATION);
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error.message}</p>;
+    const [ createUser ] = useMutation (CREATE_USER_MUTATION);
+    const [ deleteUserByID ] = useMutation (DELETE_USER_BY_ID);
+    const [ deleteUserByUsername ] = useMutation (DELETE_USER_BY_USERNAME);
+
 
     //==== checking data in console =====
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error.message}</p>;
     if (companyData){
     console.log(companyData)
     }
@@ -78,7 +98,7 @@ function DisplayData() {
     return (
         <div>
             <h2>Display Data Content</h2>
-            
+
             <div className="add-user-panel">
                 <input type = "text" placeholder="Name..." onChange={(event) => setName(event.target.value)} />
                 <input type = "text" placeholder="Username..." onChange={(event) => setUsername(event.target.value)} />
@@ -102,28 +122,79 @@ function DisplayData() {
                         refetch();
                     }} > Create User </button>
             </div>
-
-            {/* showing user data */}
-            {data.users.map((user) => (
-            <div className="users-list-panel" key={user.id}>
-                <h3>{user.name} ({user.username}) — {user.age} years old is from {user.nationality}</h3>
-                {/* <h3> ({user.username})</h3>
-                <h3>{user.age}</h3> */}
-            </div>
-            ))}
             <br/>
+
+            <div className="user-list-panel">
+                {/* showing user data */}
+                {/* {data.users.map((user) => ( */}
+                <div className="users-card" >
+                    {/* <h3>[{user.id}]. {user.name} ({user.username}) — {user.age} years old is from {user.nationality}</h3> */}
+                    {/* <h3> ({user.username})</h3>
+                    <h3>{user.age}</h3> */}
+                    <table border="1" cellPadding="8" style={{ borderCollapse: "collapse", width: "100%" }}>
+                        <thead>
+                            <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Username</th>
+                            <th>Age</th>
+                            <th>Nationality</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data.users.map((user) => (
+                            <tr id={user.id} key={user.id}>
+                                <td>{user.id}</td>
+                                <td>{user.name}</td>
+                                <td>{user.username}</td>
+                                <td>{user.age}</td>
+                                <td>{user.nationality}</td>
+                            </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+                {/* ))} */}
+            </div>
+            <br/>
+
+            <div className="delete-user-panel">
+                <input type = "number" placeholder="enter the emp ID to delete..." onChange={(event) => setDeleteID(event.target.value)} />
+                <button
+                    onClick={() => {
+                        deleteUserByID({
+                            variables: { deleteUserId: deleteID }, });
+                        refetch();
+                    }}
+                > Delete </button>
+                <br/>
+                <br/>
+
+                <input type = "text" placeholder="enter the emp username to delete..." onChange={(event) => setDeleteUsername(event.target.value)} />
+                <button
+                    onClick={() => {
+                        deleteUserByUsername({
+                            variables: { username: deleteUsername }, });
+                        refetch();
+                    }}
+                > Delete </button>
+            </div>
+            <br/>
+
             {/* {companyData.companies.map((company) => (
             <div key={company.id}>
                 <h3> Company Name: {company.name}, Date of joining: ({company.dateOfJoining}) isWorking: {company.isWorking}</h3>
             </div>
             ))} */}
+            <div className="company-list-panel">
+                {companyData &&
+                    companyData.companies.map((company) => {
+                    return <h3> Company Name: {company.name}, Date of joining: ({company.dateOfJoining}) isWorking: {company.isWorking}</h3>;
+                    })}
+            </div>
+            <br/>
 
-            {companyData &&
-                companyData.companies.map((company) => {
-                return <h3> Company Name: {company.name}, Date of joining: ({company.dateOfJoining}) isWorking: {company.isWorking}</h3>;
-                })}
-
-            <div className="company-details-panel">
+            <div className="fetch-company-panel">
                 <input type="text" placeholder="Company Name..." onChange={(event) => setCompanySearched(event.target.value)} />
                 <button onClick={() => fetchCompany({ variables: { name: companySearched } })}> Fetch Company </button>
                 <div className="company-data-card">
