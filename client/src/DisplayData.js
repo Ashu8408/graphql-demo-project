@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { gql } from "@apollo/client";
-import { useQuery, useLazyQuery } from "@apollo/client/react";
+import { useQuery, useLazyQuery, useMutation } from "@apollo/client/react";
 
 
 const QUERY_ALL_USERS = gql`
@@ -33,15 +33,33 @@ const GET_COMPANY_BY_NAME = gql`
         }
     }
 `
+const CREATE_USER_MUTATION = gql`
+    mutation CreateUser($input: CreateUserInput!) {
+        createUser(input: $input) {
+            id
+            name
+            age
+            nationality
+        }
+    }
+`
 
 function DisplayData() {
 
     const [companySearched, setCompanySearched] = useState("");
 
+    //create user state
+    const [name, setName] = useState("");
+    const [username, setUsername] = useState("");
+    const [age, setAge] = useState("");
+    const [nationality, setNationality] = useState("");
+    
     const { loading, error, data } = useQuery(QUERY_ALL_USERS);
     const { data: companyData } = useQuery( QUERY_ALL_COMPANY);
     const [ fetchCompany, { data: companySearchedData, error: companyError }, ] = useLazyQuery(GET_COMPANY_BY_NAME);
     // fetchCompany is a fn that fetches the data
+    
+    const [ createUser ] = useMutation (CREATE_USER_MUTATION);
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
@@ -61,6 +79,28 @@ function DisplayData() {
         <div>
             <h2>Display Data Content</h2>
             
+            <div className="add-user-panel">
+                <input type = "text" placeholder="Name..." onChange={(event) => setName(event.target.value)} />
+                <input type = "text" placeholder="Username..." onChange={(event) => setUsername(event.target.value)} />
+                <input type = "number" placeholder="Age..." onChange={(event) => setAge(event.target.value)} />
+                {/* <input type = "text" placeholder="Nationality..." onChange={(event) => setNationality(event.target.value.toUpperCase())} /> */}
+                <select onChange={(event) => setNationality(event.target.value)}>
+                    <option value="CANADA">Canada</option>
+                    <option value="BRAZIL">Brazil</option>
+                    <option value="USA">USA</option>
+                    <option value="INDIA">India</option>
+                    <option value="GERMANY">Germany</option>
+                    <option value="CHILE">Chile</option>
+                    <option value="UKRAINE">Ukraine</option>
+                </select>
+
+                <button
+                    onClick={() =>createUser({
+                        variables: {input: {name, username, age: Number(age), nationality, }}, })
+                    } > Create User </button>
+            </div>
+            
+            {/* showing user data */}
             {data.users.map((user) => (
             <div key={user.id}>
                 <h3>{user.name} ({user.username}) — {user.age} years old is from {user.nationality}</h3>
