@@ -54,7 +54,7 @@ function DisplayData() {
     const [age, setAge] = useState("");
     const [nationality, setNationality] = useState("");
     
-    const { loading, error, data } = useQuery(QUERY_ALL_USERS);
+    const { loading, error, data, refetch } = useQuery(QUERY_ALL_USERS);
     const { data: companyData } = useQuery( QUERY_ALL_COMPANY);
     const [ fetchCompany, { data: companySearchedData, error: companyError }, ] = useLazyQuery(GET_COMPANY_BY_NAME);
     // fetchCompany is a fn that fetches the data
@@ -95,14 +95,17 @@ function DisplayData() {
                 </select>
 
                 <button
-                    onClick={() =>createUser({
-                        variables: {input: {name, username, age: Number(age), nationality, }}, })
-                    } > Create User </button>
+                    onClick={() => {
+                        createUser({
+                            variables: {input: { name, username, age: Number(age), nationality }},
+                        });
+                        refetch();
+                    }} > Create User </button>
             </div>
-            
+
             {/* showing user data */}
             {data.users.map((user) => (
-            <div key={user.id}>
+            <div className="users-list-panel" key={user.id}>
                 <h3>{user.name} ({user.username}) — {user.age} years old is from {user.nationality}</h3>
                 {/* <h3> ({user.username})</h3>
                 <h3>{user.age}</h3> */}
