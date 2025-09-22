@@ -3,8 +3,6 @@ import { ApolloClient, InMemoryCache, HttpLink, } from "@apollo/client";
 import { ApolloProvider } from "@apollo/client/react";
 import DisplayData from "./DisplayData";
 
-// import DisplayData from "./DisplayData";
-
 function App() {
   const client = new ApolloClient({
     cache: new InMemoryCache(),
@@ -18,7 +16,6 @@ function App() {
         <DisplayData />
       </div>
     </ApolloProvider>
-    
   );
 }
 

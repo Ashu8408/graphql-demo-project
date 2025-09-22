@@ -81,7 +81,6 @@ function DisplayData() {
     const [ deleteUserByID ] = useMutation (DELETE_USER_BY_ID);
     const [ deleteUserByUsername ] = useMutation (DELETE_USER_BY_USERNAME);
 
-
     //==== checking data in console =====
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
@@ -99,7 +98,7 @@ function DisplayData() {
         <div>
             <h2>Display Data Content</h2>
 
-            <div className="add-user-panel">
+            <div className="create-user-panel">
                 <input type = "text" placeholder="Name..." onChange={(event) => setName(event.target.value)} />
                 <input type = "text" placeholder="Username..." onChange={(event) => setUsername(event.target.value)} />
                 <input type = "number" placeholder="Age..." onChange={(event) => setAge(event.target.value)} />
@@ -113,7 +112,6 @@ function DisplayData() {
                     <option value="CHILE">Chile</option>
                     <option value="UKRAINE">Ukraine</option>
                 </select>
-
                 <button
                     onClick={() => {
                         createUser({
@@ -123,7 +121,6 @@ function DisplayData() {
                     }} > Create User </button>
             </div>
             <br/>
-
             <div className="user-list-panel">
                 {/* showing user data */}
                 {/* {data.users.map((user) => ( */}
@@ -131,7 +128,7 @@ function DisplayData() {
                     {/* <h3>[{user.id}]. {user.name} ({user.username}) — {user.age} years old is from {user.nationality}</h3> */}
                     {/* <h3> ({user.username})</h3>
                     <h3>{user.age}</h3> */}
-                    <table border="1" cellPadding="8" style={{ borderCollapse: "collapse", width: "100%" }}>
+                    <table className="user-list-table" border="1" cellPadding="8" style={{ borderCollapse: "collapse", width: "100%" }}>
                         <thead>
                             <tr>
                             <th>ID</th>
@@ -157,30 +154,29 @@ function DisplayData() {
                 {/* ))} */}
             </div>
             <br/>
-
             <div className="delete-user-panel">
-                <input type = "number" placeholder="enter the emp ID to delete..." onChange={(event) => setDeleteID(event.target.value)} />
-                <button
-                    onClick={() => {
-                        deleteUserByID({
-                            variables: { deleteUserId: deleteID }, });
-                        refetch();
-                    }}
-                > Delete </button>
+                <div className="delete-by-id">
+                    <input type = "number" placeholder="enter the emp ID to delete..." onChange={(event) => setDeleteID(event.target.value)} />
+                    <button onClick={() => {
+                            deleteUserByID({
+                                variables: { deleteUserId: deleteID }, });
+                            refetch();
+                        }}
+                    > Delete </button>
+                </div>
                 <br/>
                 <br/>
-
-                <input type = "text" placeholder="enter the emp username to delete..." onChange={(event) => setDeleteUsername(event.target.value)} />
-                <button
-                    onClick={() => {
-                        deleteUserByUsername({
-                            variables: { username: deleteUsername }, });
-                        refetch();
-                    }}
-                > Delete </button>
+                <div className="delete-by-username">
+                    <input type = "text" placeholder="enter the emp username to delete..." onChange={(event) => setDeleteUsername(event.target.value)} />
+                    <button onClick={() => {
+                            deleteUserByUsername({
+                                variables: { username: deleteUsername }, });
+                            refetch();
+                        }}
+                    > Delete </button>
+                </div>
             </div>
             <br/>
-
             {/* {companyData.companies.map((company) => (
             <div key={company.id}>
                 <h3> Company Name: {company.name}, Date of joining: ({company.dateOfJoining}) isWorking: {company.isWorking}</h3>
@@ -193,7 +189,6 @@ function DisplayData() {
                     })}
             </div>
             <br/>
-
             <div className="fetch-company-panel">
                 <input type="text" placeholder="Company Name..." onChange={(event) => setCompanySearched(event.target.value)} />
                 <button onClick={() => fetchCompany({ variables: { name: companySearched } })}> Fetch Company </button>
